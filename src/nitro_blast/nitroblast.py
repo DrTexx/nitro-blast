@@ -16,8 +16,9 @@ def main() -> None:
             """
 
 Options:
-  --help              display help text
-  --skip-firestarter  skip running FIRESTARTER
+  --help                 display help text
+  --skip-firestarter     skip running FIRESTARTER
+  --unquiet-firestarter  don't use the quiet flag (-q) when running FIRESTARTER
 """
         )
         sys.exit(0)
@@ -31,8 +32,12 @@ Options:
     if "--skip-firestarter" in sys.argv:
         log("Skipping FIRESTARTER (--skip-firestarter used)")
     else:
+        firestarter_commandline = [FIRESTARTER_BIN, "-t", "10"]
+        if not "--unquiet-firestarter" in sys.argv:
+            firestarter_commandline.append("-q")
+
         log("Running FIRESTARTER for 10s...")
-        subprocess.run([FIRESTARTER_BIN, "-t", "10"])
+        subprocess.run(firestarter_commandline)
         log("Running FIRESTARTER for 10s... - OK")
 
     log("Done!")
