@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "Building binary..."
 uv run pyinstaller src/nitro_blast/nitroblast.py --name NiTROBLAST --onefile
 mkdir -p ./dist/tools/
