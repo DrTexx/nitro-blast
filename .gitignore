@@ -221,5 +221,6 @@ __marimo__/
 
 # ---- project specific ----
 /put-programs-here/*.exe
+/put-programs-here/FIRESTARTER/**
 /put-python-interpreters-here/**
 /build-firestarter
