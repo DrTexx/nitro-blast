@@ -12,6 +12,8 @@ You must have the following installed on your system to build NiTROBLAST.
 
 ### Windows
 
+Download embedded version of Python interpreter ([64-bit](https://www.python.org/ftp/python/3.14.10/python-3.14.10-embed-amd64.zip) / [32-bit](https://www.python.org/ftp/python/3.14.10/python-3.14.10-embed-win32.zip) / [ARM](https://www.python.org/ftp/python/3.14.10/python-3.14.10-embed-arm64.zip)) for platforms that you want to support and place them into `./put-python-interpreters-here`
+
 From Git Bash, run
 
 ```bash
