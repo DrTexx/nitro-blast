@@ -48,11 +48,11 @@ Options:
         log("Skipping FIRESTARTER (--skip-firestarter used)")
     else:
         firestarter_commandline = [FIRESTARTER_BIN, "-t", "10"]
-        suppress_firestarter_output = True
+        capture_firestarter_output = True
         if "--unsilence-firestarter" in sys.argv:
-            suppress_firestarter_output = False
+            capture_firestarter_output = False
         if "--quiet-firestarter" in sys.argv:
-            suppress_firestarter_output = False
+            capture_firestarter_output = False
             firestarter_commandline.append("-q")
 
         log("Running FIRESTARTER for 10s...")
@@ -61,7 +61,7 @@ Options:
         p_firestarter_status.start()
         subprocess.run(
             firestarter_commandline,
-            capture_output=(not suppress_firestarter_output),
+            capture_output=capture_firestarter_output,
         )
         p_firestarter_status.terminate()
         print()  # newline after terminating status process
