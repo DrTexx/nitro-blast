@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---- project specific ----
+/put-programs-here/*.exe
+/put-python-interpreters-here/*
