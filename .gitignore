@@ -221,4 +221,4 @@ __marimo__/
 
 # ---- project specific ----
 /put-programs-here/*.exe
-/put-python-interpreters-here/*
+/put-python-interpreters-here/**
