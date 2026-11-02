@@ -1,6 +1,11 @@
 # nitro-blast
 Tool for unattended benchmarking
 
+## Usage
+
+**Windows** - Double-click `run-on-windows.bat`
+**Linux** - Run `./NiTROBLAST`
+
 ## Building
 
 ### Prerequisites
