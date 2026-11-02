@@ -15,11 +15,11 @@ You must have the following installed on your system to build NiTROBLAST.
 From Git Bash, run
 
 ```bash
-./build.sh
+./build-windows.sh
 ```
 
 ### Linux
 
 ```bash
-./build.sh
+./build-linux.sh
 ```
