@@ -1,18 +1,23 @@
 import subprocess
 
+LOG_PREFIX = "[NiTROBLAST] "
 FIRESTARTER_DIR = "./tools/FIRESTARTER"
 FIRESTARTER_BIN = f"{FIRESTARTER_DIR}/FIRESTARTER"
 
 
+def log(msg, message_prefix=LOG_PREFIX):
+    print(message_prefix + msg)
+
+
 def main() -> None:
-    print("[NiTROBLAST] Hello from NiTROBLAST!")
-    print("[NiTROBLAST] Running precursory Python subprocess test...")
+    log("Hello from NiTROBLAST!")
+    log("Running precursory Python subprocess test...")
     subprocess.run(["python3", "-c", 'print("Hello, world!")'])
-    print("[NiTROBLAST] Running precursory Python subprocess test... - OK")
-    print("[NiTROBLAST] Running FIRESTARTER for 10s...")
+    log("Running precursory Python subprocess test... - OK")
+    log("Running FIRESTARTER for 10s...")
     subprocess.run([FIRESTARTER_BIN, "-t", "10"])
-    print("[NiTROBLAST] Running FIRESTARTER for 10s... - OK")
-    print("[NiTROBLAST] Done!")
+    log("Running FIRESTARTER for 10s... - OK")
+    log("Done!")
 
 
 if __name__ == "__main__":
