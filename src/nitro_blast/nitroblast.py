@@ -13,9 +13,14 @@ def log(msg, message_prefix=LOG_PREFIX):
 
 
 def firestarter_status():
-    while True:
-        print("🔥", end="", flush=True)
-        sleep(1)
+    try:
+        while True:
+            print("🔥", end="", flush=True)
+            sleep(1)
+    except KeyboardInterrupt:
+        log("Process aborted.")
+    except Exception as err:
+        raise err
 
 
 def main() -> None:
@@ -64,4 +69,9 @@ if __name__ == "__main__":
     # ... itself instead of another process when
     # ... Process().start() is used.
     freeze_support()
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        log("Script aborted.")
+    except Exception as err:
+        raise err
