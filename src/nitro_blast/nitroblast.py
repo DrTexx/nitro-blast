@@ -1,4 +1,5 @@
 import subprocess
+import sys
 
 LOG_PREFIX = "[NiTROBLAST] "
 FIRESTARTER_DIR = "./tools/FIRESTARTER"
@@ -10,14 +11,32 @@ def log(msg, message_prefix=LOG_PREFIX):
 
 
 def main() -> None:
+    if "--help" in sys.argv:
+        log(
+            """
+
+Options:
+  --help              display help text
+  --skip-firestarter  skip running FIRESTARTER
+"""
+        )
+        sys.exit(0)
+
     log("Hello from NiTROBLAST!")
+
     log("Running precursory Python subprocess test...")
     subprocess.run(["python3", "-c", 'print("Hello, world!")'])
     log("Running precursory Python subprocess test... - OK")
-    log("Running FIRESTARTER for 10s...")
-    subprocess.run([FIRESTARTER_BIN, "-t", "10"])
-    log("Running FIRESTARTER for 10s... - OK")
+
+    if "--skip-firestarter" in sys.argv:
+        log("Skipping FIRESTARTER (--skip-firestarter used)")
+    else:
+        log("Running FIRESTARTER for 10s...")
+        subprocess.run([FIRESTARTER_BIN, "-t", "10"])
+        log("Running FIRESTARTER for 10s... - OK")
+
     log("Done!")
+    sys.exit(0)
 
 
 if __name__ == "__main__":
