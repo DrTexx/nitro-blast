@@ -13,6 +13,7 @@ elif sys.platform == "win32":
 else:
     PYTHON_BINARY = "python"
 
+
 def log(msg, message_prefix=LOG_PREFIX):
     print(message_prefix + msg)
 
