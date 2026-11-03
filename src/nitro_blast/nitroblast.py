@@ -6,7 +6,12 @@ from multiprocessing import Process, freeze_support
 LOG_PREFIX = "[NiTROBLAST] "
 FIRESTARTER_DIR = "./tools/FIRESTARTER"
 FIRESTARTER_BIN = f"{FIRESTARTER_DIR}/FIRESTARTER"
-
+if sys.platform == "linux":
+    PYTHON_BINARY = "python3"
+elif sys.platform == "win32":
+    PYTHON_BINARY = ".\\_internal\\python-interpreters\\python314_64bit\\python.exe"
+else:
+    PYTHON_BINARY = "python"
 
 def log(msg, message_prefix=LOG_PREFIX):
     print(message_prefix + msg)
@@ -41,7 +46,7 @@ Options:
     log("Hello from NiTROBLAST!")
 
     log("Running precursory Python subprocess test...")
-    subprocess.run(["python3", "-c", 'print("Hello, world!")'])
+    subprocess.run([PYTHON_BINARY, "-c", 'print("Hello, world!")'])
     log("Running precursory Python subprocess test... - OK")
 
     if "--skip-firestarter" in sys.argv:
