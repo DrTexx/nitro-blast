@@ -2,6 +2,7 @@ import subprocess
 import sys
 from time import sleep
 from multiprocessing import Process, freeze_support
+import traceback
 
 LOG_PREFIX = "[NiTROBLAST] "
 FIRESTARTER_DIR = "./tools/FIRESTARTER"
@@ -46,40 +47,47 @@ Linux only:
         )
         sys.exit(0)
 
-    log("Hello from NiTROBLAST!")
+    try:
+        log("Hello from NiTROBLAST!")
 
-    log("Running precursory Python subprocess test...")
-    subprocess.run([PYTHON_BINARY, "-c", 'print("Hello, world!")'])
-    log("Running precursory Python subprocess test... - OK")
+        log("Running precursory Python subprocess test...")
+        subprocess.run([PYTHON_BINARY, "-c", 'print("Hello, world!")'])
+        log("Running precursory Python subprocess test... - OK")
 
-    if "--skip-firestarter" in sys.argv:
-        log("Skipping FIRESTARTER (--skip-firestarter used)")
-    elif sys.platform == "win32":
-        log("Skipping FIRESTARTER (not yet supported on Windows)")
-    else:
-        firestarter_commandline = [FIRESTARTER_BIN, "-t", "10"]
-        capture_firestarter_output = True
-        if "--unsilence-firestarter" in sys.argv:
-            capture_firestarter_output = False
-        if "--quiet-firestarter" in sys.argv:
-            capture_firestarter_output = False
-            firestarter_commandline.append("-q")
+        if "--skip-firestarter" in sys.argv:
+            log("Skipping FIRESTARTER (--skip-firestarter used)")
+        elif sys.platform == "win32":
+            log("Skipping FIRESTARTER (not yet supported on Windows)")
+        else:
+            firestarter_commandline = [FIRESTARTER_BIN, "-t", "10"]
+            capture_firestarter_output = True
+            if "--unsilence-firestarter" in sys.argv:
+                capture_firestarter_output = False
+            if "--quiet-firestarter" in sys.argv:
+                capture_firestarter_output = False
+                firestarter_commandline.append("-q")
 
-        log("Running FIRESTARTER for 10s...")
+            log("Running FIRESTARTER for 10s...")
 
-        p_firestarter_status = Process(target=firestarter_status)
-        p_firestarter_status.start()
-        subprocess.run(
-            firestarter_commandline,
-            capture_output=capture_firestarter_output,
-        )
-        p_firestarter_status.terminate()
-        print()  # newline after terminating status process
+            p_firestarter_status = Process(target=firestarter_status)
+            p_firestarter_status.start()
+            subprocess.run(
+                firestarter_commandline,
+                capture_output=capture_firestarter_output,
+            )
+            p_firestarter_status.terminate()
+            print()  # newline after terminating status process
 
-        log("Running FIRESTARTER for 10s... - OK")
+            log("Running FIRESTARTER for 10s... - OK")
 
-    log("Done!")
-    sys.exit(0)
+        log("Done!")
+        input("\nPress [ENTER] to close...")
+        sys.exit(0)
+    except Exception as err:
+        traceback.print_exc()
+        log("^ An error occurred:")
+        input("\nPress [ENTER] to close...")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
