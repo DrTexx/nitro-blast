@@ -10,7 +10,7 @@ FIRESTARTER_BIN = f"{FIRESTARTER_DIR}/FIRESTARTER"
 if sys.platform == "linux":
     PYTHON_BINARY = "python3"
 elif sys.platform == "win32":
-    PYTHON_BINARY = ".\\_internal\\python-interpreters\\python314_64bit\\python.exe"
+    PYTHON_BINARY = "python.exe"
 else:
     PYTHON_BINARY = "python"
 
