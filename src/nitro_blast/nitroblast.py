@@ -35,6 +35,8 @@ def main() -> None:
 
 Options:
   --help                   display help text
+  
+Linux only:
   --skip-firestarter       skip running FIRESTARTER
   --unsilence-firestarter  don't silence FIRESTARTER
   --quiet-firestarter      use the quiet flag (-q) when running FIRESTARTER,
@@ -51,6 +53,8 @@ Options:
 
     if "--skip-firestarter" in sys.argv:
         log("Skipping FIRESTARTER (--skip-firestarter used)")
+    elif sys.platform == "win32":
+        log("Skipping FIRESTARTER (not yet supported on Windows)")
     else:
         firestarter_commandline = [FIRESTARTER_BIN, "-t", "10"]
         capture_firestarter_output = True
