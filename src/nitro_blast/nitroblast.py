@@ -8,6 +8,7 @@ from tkinter.filedialog import askopenfilename
 import json
 from os import path
 from tkinter.messagebox import askyesno
+import sched
 
 CONFIG_FILEPATH = "./nitroblast_config.json"
 LOG_PREFIX = "[NiTROBLAST] "
@@ -188,6 +189,8 @@ Linux only:
     try:
         log("Hello from NiTROBLAST!")
 
+        scheduler = sched.scheduler()
+
         log("Running precursory Python subprocess test...")
         subprocess.run([PYTHON_BINARY, "-c", 'print("Hello, world!")'])
         log("Running precursory Python subprocess test... - OK")
@@ -200,6 +203,21 @@ Linux only:
             log("Running FIRESTARTER for 10s...")
             _run_firestarter_10s(_firestarter_bin)
             log("Running FIRESTARTER for 10s... - OK")
+
+        if sys.platform == "win32":
+            log("Running prime95 for 10s...")
+
+            p_prime95 = subprocess.Popen([_prime95_bin])
+            try:
+                scheduler.enter(
+                    10,
+                    1,
+                    p_prime95.terminate,
+                )
+                scheduler.run()
+                log("Running prime95 for 10s... - OK")
+            finally:
+                p_prime95.terminate()
 
         log("Done!")
         input("\nPress [ENTER] to close...")
