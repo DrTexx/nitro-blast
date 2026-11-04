@@ -7,10 +7,11 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import json
 from os import path
+from tkinter.messagebox import askyesno
 
 CONFIG_FILEPATH = "./nitroblast_config.json"
 LOG_PREFIX = "[NiTROBLAST] "
-RESET_TOOL_PATH_FLAG = "--reset-all-tool-paths"
+RESET_TOOL_PATH_FLAG = "--clear-all-tool-paths"
 DEFAULT_CONFIG = {"tool_paths": {}}
 
 
@@ -70,6 +71,24 @@ class Config:
         with open(CONFIG_FILEPATH, "w") as f:
             json.dump(cfg, f, indent=4)
         self.reload_config()
+
+    def clear_all_tool_paths(self):
+        log("  Awaiting user confirmation...")
+        if (
+            askyesno(
+                "Are you sure?",
+                "All tool paths will be cleared from the NiTROBLAST config file",
+            )
+            is True
+        ):
+            with open(CONFIG_FILEPATH, "r") as f:
+                cfg = json.load(f)
+            cfg["tool_paths"] = {}
+            with open(CONFIG_FILEPATH, "w") as f:
+                json.dump(cfg, f, indent=4)
+            log("  Tool paths cleared from config.")
+        else:
+            log("  Operation aborted. Tool paths left as-is.")
 
 
 FIRESTARTER_DIR = "./tools/FIRESTARTER"
@@ -138,8 +157,11 @@ Linux only:
 
     cfg = Config()
 
-    # if RESET_TOOL_PATH_FLAG in sys.argv:
-    #     cfg.clear_tools_paths()
+    if RESET_TOOL_PATH_FLAG in sys.argv:
+        log("Clearing tool paths...")
+        cfg.clear_all_tool_paths()
+        log("Clearing tool paths... - OK")
+        sys.exit(0)
 
     _prime95_bin = cfg.get_tool_path("prime95")
     log(f"prime95 binary path: {_prime95_bin}")
