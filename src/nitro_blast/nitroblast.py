@@ -37,8 +37,6 @@ class Config:
             print(f"Please select the path to '{tool_name}'")
             Tk().withdraw()
             tool_path = askopenfilename()
-            
-            
 
     def update_tool_path(self, tool_name, tool_path):
         tool_path = path.relpath(tool_path)
