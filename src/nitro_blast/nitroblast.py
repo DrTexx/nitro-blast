@@ -3,8 +3,52 @@ import sys
 from time import sleep
 from multiprocessing import Process, freeze_support
 import traceback
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+import json
+from os import path
 
+CONFIG_FILEPATH = "./nitroblast_config.json"
 LOG_PREFIX = "[NiTROBLAST] "
+RESET_TOOL_PATH_FLAG = "--reset-all-tool-paths"
+DEFAULT_CONFIG = {"tool_paths": {}}
+
+
+class Config:
+    def __init__(self):
+        if not path.exists(CONFIG_FILEPATH):
+            with open(CONFIG_FILEPATH, "w") as f:
+                json.dump(DEFAULT_CONFIG, f, indent=4)
+        with open(CONFIG_FILEPATH, "r") as f:
+            _config = json.load(f)
+        self.tool_paths = _config["tool_paths"]
+
+    def get_tool_path(self, tool_name):
+        if tool_name in self.tool_paths:
+            tool_path = self.tool_paths[tool_name]
+            if not path.exists(tool_path):
+                raise RuntimeError(
+                    f"Failed to find tool {tool_name} at configured path ('{tool_path}')."
+                    + f"\nIf any tools have been moved, try using the `{RESET_TOOL_PATH_FLAG} option"
+                )
+            return
+        else:
+            print(f"Path to tool '{tool_name}' not configured.")
+            print(f"Please select the path to '{tool_name}'")
+            Tk().withdraw()
+            tool_path = askopenfilename()
+            
+            
+
+    def update_tool_path(self, tool_name, tool_path):
+        tool_path = path.relpath(tool_path)
+        with open(CONFIG_FILEPATH, "r") as f:
+            cfg = json.load(f)
+        cfg["tool_paths"][tool_name] = tool_path
+        with open(CONFIG_FILEPATH, "w") as f:
+            json.dump(cfg, f)
+
+
 FIRESTARTER_DIR = "./tools/FIRESTARTER"
 FIRESTARTER_BIN = f"{FIRESTARTER_DIR}/FIRESTARTER"
 if sys.platform == "linux":
@@ -33,11 +77,12 @@ def firestarter_status():
 def main() -> None:
     if "--help" in sys.argv:
         log(
-            """
+            f"""
 
 Options:
   --help                   display help text
-  
+  {RESET_TOOL_PATH_FLAG}   clears the stored path for all tools, will re-prompt
+                           user for paths again next run
 Linux only:
   --skip-firestarter       skip running FIRESTARTER
   --unsilence-firestarter  don't silence FIRESTARTER
@@ -46,6 +91,14 @@ Linux only:
 """
         )
         sys.exit(0)
+
+    cfg = Config()
+
+    # if RESET_TOOL_PATH_FLAG in sys.argv:
+    #     cfg.clear_tools_paths()
+
+    _prime95_bin = cfg.get_tool_path("prime95")
+    print(f"prime95 binary path: {_prime95_bin}")
 
     try:
         log("Hello from NiTROBLAST!")
