@@ -91,8 +91,6 @@ class Config:
             log("  Operation aborted. Tool paths left as-is.")
 
 
-FIRESTARTER_DIR = "./tools/FIRESTARTER"
-FIRESTARTER_BIN = f"{FIRESTARTER_DIR}/FIRESTARTER"
 if sys.platform == "linux":
     PYTHON_BINARY = "python3"
 elif sys.platform == "win32":
@@ -116,8 +114,8 @@ def firestarter_status():
         raise err
 
 
-def _run_firestarter_10s():
-    firestarter_commandline = [FIRESTARTER_BIN, "-t", "10"]
+def _run_firestarter_10s(firestarter_bin):
+    firestarter_commandline = [firestarter_bin, "-t", "10"]
     capture_firestarter_output = True
     if "--unsilence-firestarter" in sys.argv:
         capture_firestarter_output = False
@@ -163,8 +161,10 @@ Linux only:
         log("Clearing tool paths... - OK")
         sys.exit(0)
 
-    _prime95_bin = cfg.get_tool_path("prime95")
-    log(f"prime95 binary path: {_prime95_bin}")
+    if sys.platform == "linux":
+        _firestarter_bin = cfg.get_tool_path("FIRESTARTER")
+    if sys.platform == "win32":
+        _prime95_bin = cfg.get_tool_path("prime95")
 
     try:
         log("Hello from NiTROBLAST!")
@@ -179,7 +179,7 @@ Linux only:
             log("Skipping FIRESTARTER (not yet supported on Windows)")
         else:
             log("Running FIRESTARTER for 10s...")
-            _run_firestarter_10s()
+            _run_firestarter_10s(_firestarter_bin)
             log("Running FIRESTARTER for 10s... - OK")
 
         log("Done!")
