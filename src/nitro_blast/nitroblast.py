@@ -16,16 +16,26 @@ DEFAULT_CONFIG = {"tool_paths": {}}
 
 class Config:
     def __init__(self):
+        # create config if it doesn't already exist
         if not path.exists(CONFIG_FILEPATH):
             with open(CONFIG_FILEPATH, "w") as f:
                 json.dump(DEFAULT_CONFIG, f, indent=4)
+
+        # attempt to load the config
+        self.__config = self._read_config()
+
+    def _read_config(self):
         with open(CONFIG_FILEPATH, "r") as f:
-            _config = json.load(f)
-        self.tool_paths = _config["tool_paths"]
+            cfg = json.load(f)
+        return cfg
+
+    def reload_config(self):
+        self.__config = self._read_config()
 
     def get_tool_path(self, tool_name):
-        if tool_name in self.tool_paths:
-            tool_path = self.tool_paths[tool_name]
+        tool_path = None
+        if tool_name in self.__config["tool_paths"]:
+            tool_path = self.__config["tool_paths"][tool_name]
             if not path.exists(tool_path):
                 raise RuntimeError(
                     f"Failed to find tool {tool_name} at configured path ('{tool_path}')."
@@ -33,10 +43,24 @@ class Config:
                 )
             return
         else:
-            print(f"Path to tool '{tool_name}' not configured.")
-            print(f"Please select the path to '{tool_name}'")
+            log(f"Path to tool '{tool_name}' not configured.")
+            log(f"Please select the path to '{tool_name}'")
             Tk().withdraw()
-            tool_path = askopenfilename()
+            while (tool_path is None) or (not path.exists(tool_path)):
+                tool_path = askopenfilename()
+                # log(f"Testing new tool path for '{tool_name}' ('{tool_path}') is accessible...")
+                if (not tool_path) or (not path.exists(tool_path)):
+                    log(
+                        f"Error: Failed to find tool '{tool_name}' at path '{tool_path}'. Please try again."
+                    )
+                    tool_path = None
+                    continue
+                # log(
+                #     f"Testing new tool path for '{tool_name}' ({tool_path}) is accessible... - OK"
+                # )
+
+            self.update_tool_path(tool_name, tool_path)
+            return self.get_tool_path(tool_name)
 
     def update_tool_path(self, tool_name, tool_path):
         tool_path = path.relpath(tool_path)
@@ -44,7 +68,8 @@ class Config:
             cfg = json.load(f)
         cfg["tool_paths"][tool_name] = tool_path
         with open(CONFIG_FILEPATH, "w") as f:
-            json.dump(cfg, f)
+            json.dump(cfg, f, indent=4)
+        self.reload_config()
 
 
 FIRESTARTER_DIR = "./tools/FIRESTARTER"
@@ -96,7 +121,7 @@ Linux only:
     #     cfg.clear_tools_paths()
 
     _prime95_bin = cfg.get_tool_path("prime95")
-    print(f"prime95 binary path: {_prime95_bin}")
+    log(f"prime95 binary path: {_prime95_bin}")
 
     try:
         log("Hello from NiTROBLAST!")
@@ -122,12 +147,14 @@ Linux only:
 
             p_firestarter_status = Process(target=firestarter_status)
             p_firestarter_status.start()
-            subprocess.run(
-                firestarter_commandline,
-                capture_output=capture_firestarter_output,
-            )
-            p_firestarter_status.terminate()
-            print()  # newline after terminating status process
+            try:
+                subprocess.run(
+                    firestarter_commandline,
+                    capture_output=capture_firestarter_output,
+                )
+            finally:
+                p_firestarter_status.terminate()
+                print()  # newline after terminating status process
 
             log("Running FIRESTARTER for 10s... - OK")
 
