@@ -35,33 +35,30 @@ class Config:
 
     def get_tool_path(self, tool_name):
         tool_path = None
-        if tool_name in self.__config["tool_paths"]:
-            tool_path = self.__config["tool_paths"][tool_name]
-            if not path.exists(tool_path):
-                raise RuntimeError(
-                    f"Failed to find tool {tool_name} at configured path ('{tool_path}')."
-                    + f"\nIf any tools have been moved, try using the `{RESET_TOOL_PATH_FLAG} option"
-                )
-            return tool_path
-        else:
+        
+        # ensure the tool path is in the config
+        if tool_name not in self.__config["tool_paths"]:
             log(f"Path to tool '{tool_name}' not configured.")
-            log(f"Please select the path to '{tool_name}'")
-            Tk().withdraw()
-            while (tool_path is None) or (not path.exists(tool_path)):
-                tool_path = askopenfilename()
-                # log(f"Testing new tool path for '{tool_name}' ('{tool_path}') is accessible...")
-                if (not tool_path) or (not path.exists(tool_path)):
-                    log(
-                        f"Error: Failed to find tool '{tool_name}' at path '{tool_path}'. Please try again."
-                    )
-                    tool_path = None
-                    continue
-                # log(
-                #     f"Testing new tool path for '{tool_name}' ({tool_path}) is accessible... - OK"
-                # )
-
+            tool_path = self._prompt_for_tool_path(tool_name, tool_path)
             self.update_tool_path(tool_name, tool_path)
-            return self.get_tool_path(tool_name)
+
+        tool_path = self.__config["tool_paths"][tool_name]
+        
+        # ensure the tool path is accessible
+        if not path.exists(tool_path):
+            log(
+                f"Error: Failed to find tool '{tool_name}' at configured path ('{tool_path}')."
+                + f"\n  Note: to clear all tool paths, you can use the {RESET_TOOL_PATH_FLAG} option"
+            )
+            tool_path = self._prompt_for_tool_path(tool_name, tool_path)
+            self.update_tool_path(tool_name, tool_path)
+
+        # TODO: ensure that the tool path is executable
+        # TODO: warn and ask for confirmation first if the tool path filename doesn't match
+        # ... what's expected for the given tool name (e.g. when the tool_name is 'prime95', we
+        # ... would expect the filename in the tool path to be 'prime95.exe')
+
+        return tool_path
 
     def update_tool_path(self, tool_name, tool_path):
         tool_path = path.relpath(tool_path)
@@ -89,6 +86,23 @@ class Config:
             log("  Tool paths cleared from config.")
         else:
             log("  Operation aborted. Tool paths left as-is.")
+
+    def _prompt_for_tool_path(self, tool_name, tool_path) -> str:
+        log(f"Please select the path to '{tool_name}'")
+        Tk().withdraw()
+        while (tool_path is None) or (not path.exists(tool_path)):
+            tool_path = askopenfilename()
+            # log(f"Testing new tool path for '{tool_name}' ('{tool_path}') is accessible...")
+            if (not tool_path) or (not path.exists(tool_path)):
+                log(
+                    f"Error: Failed to find tool '{tool_name}' at path '{tool_path}'. Please try again."
+                )
+                tool_path = None
+                continue
+            # log(
+            #     f"Testing new tool path for '{tool_name}' ({tool_path}) is accessible... - OK"
+            # )
+        return tool_path
 
 
 if sys.platform == "linux":
