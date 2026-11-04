@@ -42,7 +42,7 @@ class Config:
                     f"Failed to find tool {tool_name} at configured path ('{tool_path}')."
                     + f"\nIf any tools have been moved, try using the `{RESET_TOOL_PATH_FLAG} option"
                 )
-            return
+            return tool_path
         else:
             log(f"Path to tool '{tool_name}' not configured.")
             log(f"Please select the path to '{tool_name}'")
