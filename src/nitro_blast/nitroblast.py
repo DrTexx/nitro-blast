@@ -217,7 +217,9 @@ Linux only:
                 scheduler.run()
                 log("Running prime95 for 10s... - OK")
             finally:
+                log("Terminating prime95...")
                 p_prime95.terminate()
+                log("Terminating prime95... - OK")
 
         log("Done!")
         input("\nPress [ENTER] to close...")
