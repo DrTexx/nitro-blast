@@ -97,6 +97,27 @@ def firestarter_status():
         raise err
 
 
+def _run_firestarter_10s():
+    firestarter_commandline = [FIRESTARTER_BIN, "-t", "10"]
+    capture_firestarter_output = True
+    if "--unsilence-firestarter" in sys.argv:
+        capture_firestarter_output = False
+    if "--quiet-firestarter" in sys.argv:
+        capture_firestarter_output = False
+        firestarter_commandline.append("-q")
+
+    p_firestarter_status = Process(target=firestarter_status)
+    p_firestarter_status.start()
+    try:
+        subprocess.run(
+            firestarter_commandline,
+            capture_output=capture_firestarter_output,
+        )
+    finally:
+        p_firestarter_status.terminate()
+        print()  # newline after terminating status process
+
+
 def main() -> None:
     if "--help" in sys.argv:
         log(
@@ -135,27 +156,8 @@ Linux only:
         elif sys.platform == "win32":
             log("Skipping FIRESTARTER (not yet supported on Windows)")
         else:
-            firestarter_commandline = [FIRESTARTER_BIN, "-t", "10"]
-            capture_firestarter_output = True
-            if "--unsilence-firestarter" in sys.argv:
-                capture_firestarter_output = False
-            if "--quiet-firestarter" in sys.argv:
-                capture_firestarter_output = False
-                firestarter_commandline.append("-q")
-
             log("Running FIRESTARTER for 10s...")
-
-            p_firestarter_status = Process(target=firestarter_status)
-            p_firestarter_status.start()
-            try:
-                subprocess.run(
-                    firestarter_commandline,
-                    capture_output=capture_firestarter_output,
-                )
-            finally:
-                p_firestarter_status.terminate()
-                print()  # newline after terminating status process
-
+            _run_firestarter_10s()
             log("Running FIRESTARTER for 10s... - OK")
 
         log("Done!")
