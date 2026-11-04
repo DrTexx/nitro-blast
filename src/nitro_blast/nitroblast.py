@@ -35,7 +35,7 @@ class Config:
 
     def get_tool_path(self, tool_name):
         tool_path = None
-        
+
         # ensure the tool path is in the config
         if tool_name not in self.__config["tool_paths"]:
             log(f"Path to tool '{tool_name}' not configured.")
@@ -43,7 +43,7 @@ class Config:
             self.update_tool_path(tool_name, tool_path)
 
         tool_path = self.__config["tool_paths"][tool_name]
-        
+
         # ensure the tool path is accessible
         if not path.exists(tool_path):
             log(
@@ -175,6 +175,11 @@ Linux only:
         log("Clearing tool paths... - OK")
         sys.exit(0)
 
+    # NOTE: collect all tool paths in advanced so if any need to be prompted for they're
+    # ... prompted for all at once so that prompting for a tool path doesn't interrupt a
+    # ... nitroblast run that's already in progress. It would be annoying to think an unattended
+    # ... benchmark was running just fine and to come back and find prime95 finished but furmark
+    # ... didn't start because the tool path hadn't been configured yet.
     if sys.platform == "linux":
         _firestarter_bin = cfg.get_tool_path("FIRESTARTER")
     if sys.platform == "win32":
