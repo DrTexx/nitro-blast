@@ -185,6 +185,9 @@ Linux only:
         _firestarter_bin = cfg.get_tool_path("FIRESTARTER")
     if sys.platform == "win32":
         _prime95_bin = cfg.get_tool_path("prime95")
+        _furmark_bin = cfg.get_tool_path("furmark")
+        _occt_bin = cfg.get_tool_path("occt")
+        _ffxv_we_benchmark_bin = cfg.get_tool_path("ffxv_we_benchmark")
 
     try:
         log("Hello from NiTROBLAST!")
