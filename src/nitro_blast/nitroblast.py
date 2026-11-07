@@ -151,13 +151,13 @@ def _run_firestarter_10s(firestarter_bin):
         print()  # newline after terminating status process
 
 
-def _run_for_10s(tool_name, tool_args, tool_path, scheduler):
+def _run_for_10s(tool_name, tool_args, tool_path, scheduler, grace_period_seconds=0):
     log(f"Running {tool_name} for 10s...")
 
     p_tool = subprocess.Popen([tool_path, *tool_args])
     try:
         scheduler.enter(
-            10,
+            10 + grace_period_seconds,
             1,
             p_tool.terminate,
         )
@@ -231,16 +231,19 @@ Linux only:
             _run_for_10s(
                 "furmark",
                 [
-                    "--fullscreen",
-                    "--height",
-                    "1080",
+                    "--demo",
+                    "furmark-gl",
                     "--width",
                     "1920",
+                    "--height",
+                    "1080",
+                    "--fullscreen",
                     "--max-time",
-                    "9",
+                    "10",
                 ],
                 _furmark_bin,
                 scheduler,
+                grace_period_seconds=10,
             )
 
         log("Done!")
