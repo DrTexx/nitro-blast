@@ -150,6 +150,24 @@ def _run_firestarter_10s(firestarter_bin):
         print()  # newline after terminating status process
 
 
+def _run_for_10s(tool_name, tool_args, tool_path, scheduler):
+    log(f"Running {tool_name} for 10s...")
+
+    p_tool = subprocess.Popen([tool_path, *tool_args])
+    try:
+        scheduler.enter(
+            10,
+            1,
+            p_tool.terminate,
+        )
+        scheduler.run()
+        log(f"Running {tool_name} for 10s... - OK")
+    finally:
+        log(f"Terminating {tool_name}...")
+        p_tool.terminate()
+        log(f"Terminating {tool_name}... - OK")
+
+
 def main() -> None:
     if "--help" in sys.argv:
         log(
@@ -208,21 +226,7 @@ Linux only:
             log("Running FIRESTARTER for 10s... - OK")
 
         if sys.platform == "win32":
-            log("Running prime95 for 10s...")
-
-            p_prime95 = subprocess.Popen([_prime95_bin, "-t"])
-            try:
-                scheduler.enter(
-                    10,
-                    1,
-                    p_prime95.terminate,
-                )
-                scheduler.run()
-                log("Running prime95 for 10s... - OK")
-            finally:
-                log("Terminating prime95...")
-                p_prime95.terminate()
-                log("Terminating prime95... - OK")
+            _run_for_10s("prime95", ["-t"], _prime95_bin, scheduler)
 
         log("Done!")
         input("\nPress [ENTER] to close...")
