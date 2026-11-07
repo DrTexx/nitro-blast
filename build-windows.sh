@@ -22,15 +22,15 @@ echo "[NiTROBLAST BUILD] Creating directory for tools in ./dist... - OK"
 echo "[NiTROBLAST BUILD] Ensuring Tkinter is installed in portable Python environment..."
 TKINTER_SOURCE_PY_DIR="${USERPROFILE}/AppData/Roaming/uv/python/cpython-3.14-windows-x86_64-none"
 PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR="dist/NiTROBLAST/_internal/python-interpreters/python314_64bit"
-mkdir -p "${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/Lib"
-mkdir -p "${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/DLLs"
+# mkdir -p "${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/Lib"
+# mkdir -p "${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/DLLs"
 cp -r "${TKINTER_SOURCE_PY_DIR}/tcl" "$(pwd)/${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/tcl"
-cp -r "${TKINTER_SOURCE_PY_DIR}/Lib/tkinter" "$(pwd)/${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/Lib/tkinter"
+cp -r "${TKINTER_SOURCE_PY_DIR}/Lib/tkinter" "$(pwd)/${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/tkinter"
 install -t "$(pwd)/${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/DLLs/"\
- "${TKINTER_SOURCE_PY_DIR}/DLLs/_tkinter.pyd"\
- "${TKINTER_SOURCE_PY_DIR}/DLLs/tcl9tk90.dll"\
- "${TKINTER_SOURCE_PY_DIR}/DLLs/tcl90.dll"\
- "${TKINTER_SOURCE_PY_DIR}/DLLs/zlib1.dll"
+ "${TKINTER_SOURCE_PY_DIR}/_tkinter.pyd"\
+ "${TKINTER_SOURCE_PY_DIR}/tcl9tk90.dll"\
+ "${TKINTER_SOURCE_PY_DIR}/tcl90.dll"\
+ "${TKINTER_SOURCE_PY_DIR}/zlib1.dll"
 echo "[NiTROBLAST BUILD] Ensuring Tkinter is installed in portable Python environment... - OK"
 
 echo "[NiTROBLAST BUILD] Installing Prime95 into ./dist/tools ..."
