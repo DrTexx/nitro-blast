@@ -20,15 +20,15 @@ mkdir -p ./dist/tools
 echo "[NiTROBLAST BUILD] Creating directory for tools in ./dist... - OK"
 
 echo "[NiTROBLAST BUILD] Installing Prime95 into ./dist/tools ..."
-install -dm 755 ./put-programs-here/Prime95 ./dist/tools/Prime95
+install -dm 755 ./put-programs-here/Prime95/** ./dist/tools/Prime95
 echo "[NiTROBLAST BUILD] Installing Prime95 into ./dist/tools ... - OK"
 
 echo "[NiTROBLAST BUILD] Installing Furmark into ./dist/tools ..."
-install -dm 755 ./put-programs-here/Prime95 ./dist/tools/Prime95
+install -dm 755 ./put-programs-here/Furmark/** ./dist/tools/Furmark
 echo "[NiTROBLAST BUILD] Installing Furmark into ./dist/tools ... - OK"
 
 echo "[NiTROBLAST BUILD] Installing FFXV Windows Edition Benchmark into ./dist/tools ..."
-install -dm 755 ./put-programs-here/FFXV-WE-benchmark ./dist/tools/FFXV-WE-benchmark
+install -dm 755 ./put-programs-here/FFXV-WE-benchmark/** ./dist/tools/FFXV-WE-benchmark
 echo "[NiTROBLAST BUILD] Installing FFXV Windows Edition Benchmark into ./dist/tools ... - OK"
 
 echo "[NiTROBLAST BUILD] Done!"
