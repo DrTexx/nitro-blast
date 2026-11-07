@@ -15,18 +15,19 @@ echo "[NiTROBLAST BUILD] Copying src to dist..."
 cp -r ./src ./dist/NiTROBLAST/src
 echo "[NiTROBLAST BUILD] Copying src to dist... - OK"
 
-echo "[NiTROBLAST BUILD] Installing Prime95 into ./dist/tools ..."
+echo "[NiTROBLAST BUILD] Creating directory for tools in ./dist..."
 mkdir -p ./dist/tools
+echo "[NiTROBLAST BUILD] Creating directory for tools in ./dist... - OK"
+
+echo "[NiTROBLAST BUILD] Installing Prime95 into ./dist/tools ..."
 install -m 755 ./put-programs-here/Prime95 ./dist/tools/Prime95
 echo "[NiTROBLAST BUILD] Installing Prime95 into ./dist/tools ... - OK"
 
 echo "[NiTROBLAST BUILD] Installing Furmark into ./dist/tools ..."
-mkdir -p ./dist/tools
 install -m 755 ./put-programs-here/Prime95 ./dist/tools/Prime95
 echo "[NiTROBLAST BUILD] Installing Furmark into ./dist/tools ... - OK"
 
 echo "[NiTROBLAST BUILD] Installing FFXV Windows Edition Benchmark into ./dist/tools ..."
-mkdir -p ./dist/tools
 install -m 755 ./put-programs-here/FFXV-WE-benchmark ./dist/tools/FFXV-WE-benchmark
 echo "[NiTROBLAST BUILD] Installing FFXV Windows Edition Benchmark into ./dist/tools ... - OK"
 
