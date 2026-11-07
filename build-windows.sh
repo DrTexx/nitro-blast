@@ -28,8 +28,8 @@ cp -r "${TKINTER_SOURCE_PY_DIR}/tcl" "$(pwd)/${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR
 cp -r "${TKINTER_SOURCE_PY_DIR}/Lib/tkinter" "$(pwd)/${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/Lib/tkinter"
 install -t "$(pwd)/${PATH_IN_DIST_TO_EMBEDDABLE_PY_DIR}/DLLs/"\
  "${TKINTER_SOURCE_PY_DIR}/DLLs/_tkinter.pyd"\
- "${TKINTER_SOURCE_PY_DIR}/DLLs/tcl86t.dll"\
- "${TKINTER_SOURCE_PY_DIR}/DLLs/tk86t.dll"\
+ "${TKINTER_SOURCE_PY_DIR}/DLLs/tcl9tk90.dll"\
+ "${TKINTER_SOURCE_PY_DIR}/DLLs/tcl90.dll"\
  "${TKINTER_SOURCE_PY_DIR}/DLLs/zlib1.dll"
 echo "[NiTROBLAST BUILD] Ensuring Tkinter is installed in portable Python environment... - OK"
 
