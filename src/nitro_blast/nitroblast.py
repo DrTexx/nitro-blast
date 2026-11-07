@@ -228,6 +228,20 @@ Linux only:
 
         if sys.platform == "win32":
             _run_for_10s("prime95", ["-t"], _prime95_bin, scheduler)
+            _run_for_10s(
+                "furmark",
+                [
+                    "--fullscreen",
+                    "--height",
+                    "1080",
+                    "--width",
+                    "1920",
+                    "--max-time",
+                    "9",
+                ],
+                _furmark_bin,
+                scheduler,
+            )
 
         log("Done!")
         input("\nPress [ENTER] to close...")
