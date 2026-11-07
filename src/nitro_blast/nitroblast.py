@@ -210,7 +210,7 @@ Linux only:
         if sys.platform == "win32":
             log("Running prime95 for 10s...")
 
-            p_prime95 = subprocess.Popen([_prime95_bin])
+            p_prime95 = subprocess.Popen([_prime95_bin, "-t"])
             try:
                 scheduler.enter(
                     10,
