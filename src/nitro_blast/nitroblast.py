@@ -125,8 +125,8 @@ def firestarter_status():
             sleep(1)
     except KeyboardInterrupt:
         log("Process aborted.")
-    except Exception as err:
-        raise err
+    except Exception:
+        raise
 
 
 def _run_firestarter_10s(firestarter_bin):
@@ -144,6 +144,7 @@ def _run_firestarter_10s(firestarter_bin):
         subprocess.run(
             firestarter_commandline,
             capture_output=capture_firestarter_output,
+            check=True,
         )
     finally:
         p_firestarter_status.terminate()
@@ -213,7 +214,7 @@ Linux only:
         scheduler = sched.scheduler()
 
         log("Running precursory Python subprocess test...")
-        subprocess.run([PYTHON_BINARY, "-c", 'print("Hello, world!")'])
+        subprocess.run([PYTHON_BINARY, "-c", 'print("Hello, world!")'], check=True)
         log("Running precursory Python subprocess test... - OK")
 
         if "--skip-firestarter" in sys.argv:
