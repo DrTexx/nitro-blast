@@ -1,14 +1,14 @@
+import json
+import sched
 import subprocess
 import sys
-from time import sleep
-from multiprocessing import Process, freeze_support
 import traceback
+from multiprocessing import Process, freeze_support
+from os import path
+from time import sleep
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
-import json
-from os import path
 from tkinter.messagebox import askyesno
-import sched
 
 CONFIG_FILEPATH = "./nitroblast_config.json"
 LOG_PREFIX = "[NiTROBLAST] "
