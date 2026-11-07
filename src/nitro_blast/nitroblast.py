@@ -231,7 +231,7 @@ Linux only:
         log("Done!")
         input("\nPress [ENTER] to close...")
         sys.exit(0)
-    except Exception as err:
+    except Exception:  # noqa: BLE001
         traceback.print_exc()
         log("^ An error occurred:")
         input("\nPress [ENTER] to close...")
@@ -248,5 +248,5 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         log("Script aborted.")
-    except Exception as err:
-        raise err
+    except Exception:
+        raise
